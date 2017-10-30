@@ -1,5 +1,13 @@
 const VERTICES = [
-    0, 0, 0
+    0, 1, 0,
+    -1, -1, 0,
+    1, -1, 0
+]
+
+const COLORS = [
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, 1,
 ]
 
 class Scene {
@@ -14,7 +22,6 @@ class Scene {
         this.catchContext()
         this.initProgram()
         this.initBuffer()
-
 
     }
 
@@ -65,9 +72,10 @@ class Scene {
         }
 
         gl.useProgram(shaderProgram)
-
         shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aPos");
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute)
+        shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aColor");
+        gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute)
 
         this.vertShader = vertSahder
         this.fragSahder = fragSahder
@@ -83,7 +91,12 @@ class Scene {
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer)
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(VERTICES), gl.STATIC_DRAW)
 
+        let colorBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(COLORS), gl.STATIC_DRAW)
+
         this.vertexPositionBuffer = vertexPositionBuffer
+        this.colorBuffer = colorBuffer
 
     }
 
@@ -98,9 +111,13 @@ class Scene {
 
         gl.viewport(0, 0, this.width, this.height)
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer)
         gl.vertexAttribPointer(this.program.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0)
-        gl.drawArrays(gl.POINTS, 0, 1)
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer)
+        gl.vertexAttribPointer(this.program.vertexColorAttribute, 3, gl.FLOAT, false, 0, 0)
+
+        gl.drawArrays(gl.TRIANGLES, 0, 3)
 
 
     }
