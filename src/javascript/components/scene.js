@@ -150,6 +150,7 @@ class Scene {
                 
         gl.uniform1f(this.program.timeUniform, time)
         gl.drawArrays(gl.POINTS, 0, VERTICES.length / 3)
+        
 
 
     }
