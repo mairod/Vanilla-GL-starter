@@ -5,7 +5,9 @@
     "start": "NODE_ENV=developement webpack-dev-server --devtool source-map",
     "build": "cp ./src/*.html ./build/ & cp -R ./src/assets ./build/ & webpack -p"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gl-matrix": "^2.3.2"
+  },
   "paths": {},
   "devDependencies": {
     "babel-core": "^6.23.1",
