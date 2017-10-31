@@ -1,6 +1,7 @@
-const VERTICES = [
-    0, 0, 0
-]
+const VERTICES = []
+const RANDOM = []
+
+let time = 0
 
 class Scene {
 
@@ -9,12 +10,14 @@ class Scene {
         this.height = window.innerHeight
         this.active = false
 
+        this.pointDensity = 100
+
         this.canvas = document.createElement('canvas')
 
         this.catchContext()
+        this.computeVertices()
         this.initProgram()
         this.initBuffer()
-
 
     }
 
@@ -28,6 +31,36 @@ class Scene {
         if (this.gl == undefined) { return }
         this.active = true
 
+    }
+
+    computeVertices(){
+
+        // for (var i = 0; i < this.pointDensity; i++) {
+        //     for (var j = 0; j < this.pointDensity; j++) {
+        //         VERTICES.push((((1 / this.pointDensity) * i) - .5) * 2)
+        //         VERTICES.push((((1 / this.pointDensity) * j) - .5) * 2)
+        //         VERTICES.push(0)
+        //     }
+        // }
+
+        let count = 10000
+
+        for (var i = 0; i < count; i++) {
+            let angle = Math.random() * 2 * Math.PI
+            let dist = (i / count)
+            VERTICES.push(Math.cos(angle) * dist * .8)
+            VERTICES.push(Math.sin(angle) * dist * .8)
+            VERTICES.push(0)
+        }
+
+        for (var i = 0; i < count; i++) {
+            RANDOM.push((Math.random() - .5) * 2)
+            RANDOM.push((Math.random() - .5) * 2)
+            RANDOM.push(0)
+        }
+
+        console.log(RANDOM);
+        
     }
 
     initProgram(){
@@ -69,6 +102,11 @@ class Scene {
         shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aPos");
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute)
 
+        shaderProgram.randomPositionAttribute = gl.getAttribLocation(shaderProgram, "aPosRand");
+        gl.enableVertexAttribArray(shaderProgram.randomPositionAttribute)
+
+        shaderProgram.timeUniform = gl.getUniformLocation(shaderProgram, "uTime")
+
         this.vertShader = vertSahder
         this.fragSahder = fragSahder
         this.program = shaderProgram
@@ -83,13 +121,19 @@ class Scene {
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer)
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(VERTICES), gl.STATIC_DRAW)
 
+        let randomPositionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, randomPositionBuffer)
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(RANDOM), gl.STATIC_DRAW)
+
         this.vertexPositionBuffer = vertexPositionBuffer
+        this.randomPositionBuffer = randomPositionBuffer
 
     }
 
     render(){
         
-        if (!this.active) { return }        
+        if (!this.active) { return }    
+        time += .01    
 
         let gl = this.gl
 
@@ -98,9 +142,14 @@ class Scene {
 
         gl.viewport(0, 0, this.width, this.height)
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexPositionBuffer)
         gl.vertexAttribPointer(this.program.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0)
-        gl.drawArrays(gl.POINTS, 0, 1)
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.randomPositionBuffer)
+        gl.vertexAttribPointer(this.program.randomPositionAttribute, 3, gl.FLOAT, false, 0, 0)
+                
+        gl.uniform1f(this.program.timeUniform, time)
+        gl.drawArrays(gl.POINTS, 0, VERTICES.length / 3)
 
 
     }

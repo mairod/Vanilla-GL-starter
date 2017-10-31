@@ -1,8 +1,14 @@
 precision mediump float;
 
 attribute vec3 aPos;
+attribute vec3 aPosRand;
+
+uniform float uTime;
 
 void main(void) {
-    gl_PointSize = 20.;
-    gl_Position = vec4(aPos, 1.0);
+
+    vec3 pos = mix(aPos, aPosRand, abs(cos(uTime)));
+
+    gl_PointSize = 1.;
+    gl_Position = vec4(pos, 1.0);
 }
