@@ -40,7 +40,9 @@ class Scene {
         this.canvas.width = this.width
         this.canvas.height = this.height
 
-        this.gl = this.canvas.getContext('webgl')
+        this.gl = this.canvas.getContext('webgl', {
+            antialias: true
+        })
         if (this.gl == undefined) { return }
 
     }

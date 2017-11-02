@@ -1,6 +1,6 @@
 import glmat from 'gl-matrix'
 import GEOM from "./geom";
-import { scale } from 'gl-matrix/src/gl-matrix/vec2';
+import TextureLoader from '../textureLoader'
 
 let mat4 = glmat.mat4
 let quat = glmat.quat
@@ -59,14 +59,15 @@ class Cube {
         }
 
         gl.useProgram(shaderProgram)
-        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aPos");
+        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aPos")
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute)
-        shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aUvs");
+        shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aUvs")
         gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute)
 
-        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-        shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix");
-        shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix");
+        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix")
+        shaderProgram.mMatrixUniform = gl.getUniformLocation(shaderProgram, "uMMatrix")
+        shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix")
+        shaderProgram.uTextureUniform = gl.getUniformLocation(shaderProgram, "uTexture")
 
         this.vertShader = vertSahder
         this.fragSahder = fragSahder
@@ -138,6 +139,11 @@ class Cube {
         this.updatePositionMatrix()
         this.setMatrixUniforms()
         this.applyState()
+
+        gl.activeTexture(gl.TEXTURE0)
+        gl.bindTexture(gl.TEXTURE_2D, TextureLoader.getTexture('testTexture'))
+        gl.uniform1i(this.program.uTextureUniform, 0)
+        gl.uniform1f(this.program.uTimeUniform, time)
         
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indicesBuffer)
         gl.drawElements(gl.TRIANGLES, GEOM.indices.length, gl.UNSIGNED_SHORT, 0)
