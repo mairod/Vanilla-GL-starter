@@ -1,10 +1,17 @@
 import Manifest from '../manifest'
+
+
 import Cube from './cube/cube'
 import Plane from './plane/plane'
 import fullPlane from './fullPlane/fullPlane'
+import heightMap from './heightMap/heightMap'
+
+
 import Camera from './camera'
 import OrbitControl from './orbitControl'
 import TextureLoader from './textureLoader'
+
+
 import glmat from 'gl-matrix'
 
 let mat4 = glmat.mat4
@@ -31,6 +38,7 @@ class Scene {
         this.cube = new Cube(this)
         this.plane = new Plane(this)
         this.fullPlane = new fullPlane(this)
+        this.heightMap = new heightMap(this)
 
     }
 
@@ -53,7 +61,9 @@ class Scene {
     }
 
     loadTexture(){        
-        TextureLoader.load(Manifest.testTexture, 'testTexture').then(()=> {
+        TextureLoader.load(Manifest.testTexture, 'testTexture')
+        .then(TextureLoader.load(Manifest.heightMap, 'heightMap'))
+        .then(()=> {
             this.active = true
         })
     }
@@ -75,7 +85,8 @@ class Scene {
         this.camera.lookAt(vec3.fromValues(0, 0, 0))
         // this.cube.render()
         // this.plane.render()
-        this.fullPlane.render()
+        // this.fullPlane.render()
+        this.heightMap.render()
 
     }
 

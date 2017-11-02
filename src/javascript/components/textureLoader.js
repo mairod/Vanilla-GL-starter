@@ -4,6 +4,7 @@ class TextureLoader {
 
     constructor(){
         this.textures = {}
+        this.currentUnit = 0
     }
 
     init(scene){
@@ -16,6 +17,8 @@ class TextureLoader {
         image.onload = ()=>{
             let texture = this.initTexture(image)
             this.textures[id].texture = texture
+            this.textures[id].unit = this.currentUnit
+            this.currentUnit++
             this.textures[id].defer.resolve(texture)
         }
         image.src = url
@@ -49,6 +52,12 @@ class TextureLoader {
     getTexture(id){        
         if (this.textures[id].texture){
             return this.textures[id].texture
+        }
+    }
+
+    getTextureUnit(id){
+        if (this.textures[id].unit) {
+            return this.textures[id].unit
         }
     }
 

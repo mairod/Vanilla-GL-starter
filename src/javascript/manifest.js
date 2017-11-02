@@ -1,5 +1,6 @@
 export default {
 
-    testTexture: "assets/UV_Grid.jpg"
+    testTexture: "assets/UV_Grid.jpg",
+    heightMap: "assets/heightMap.png"
 
 }

@@ -5,7 +5,6 @@ uniform float uTime;
 
 varying vec3 vUv;
 const float division = 30.;
-
 vec2 random2(vec2 st){
     st = vec2( dot(st,vec2(12.1,311.7)),
               dot(st,vec2(269.5,183.3)) );
@@ -31,5 +30,6 @@ void main() {
     uv += noise(uv*3.)*t;
 
     vec3 color = texture2D( uTexture, uv ).xyz;
+    color *= length(uv);
     gl_FragColor = vec4(color,1.);
 }
