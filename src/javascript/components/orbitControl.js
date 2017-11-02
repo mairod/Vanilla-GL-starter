@@ -46,7 +46,7 @@ class OrbitControl {
 
         window.addEventListener('wheel', (e) => {
             this.zoom += e.deltaY / 10 
-            this.zoom = Math.min(Math.max(this.zoom, 10), 100)
+            this.zoom = Math.min(Math.max(this.zoom, 10),50)
         })
 
     }
