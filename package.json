@@ -6,7 +6,8 @@
     "build": "cp ./src/*.html ./build/ & cp -R ./src/assets ./build/ & webpack -p"
   },
   "dependencies": {
-    "gl-matrix": "^2.3.2"
+    "gl-matrix": "^2.3.2",
+    "when": "^3.7.8"
   },
   "paths": {},
   "devDependencies": {

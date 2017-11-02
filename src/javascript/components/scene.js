@@ -1,13 +1,15 @@
-import glmat from 'gl-matrix'
+import Manifest from '../manifest'
 import Cube from './cube/cube'
 import Plane from './plane/plane'
+import fullPlane from './fullPlane/fullPlane'
 import Camera from './camera'
 import OrbitControl from './orbitControl'
+import TextureLoader from './textureLoader'
+import glmat from 'gl-matrix'
 
 let mat4 = glmat.mat4
 let quat = glmat.quat
 let vec3 = glmat.vec3
-
 
 class Scene {
 
@@ -16,16 +18,19 @@ class Scene {
         this.height = window.innerHeight
         this.active = false
         this.time = 0
-
+        
         this.canvas = document.createElement('canvas')
-
+        
         this.catchContext()
+        TextureLoader.init(this)
         this.enableExtension()
+        this.loadTexture()
 
         this.camera = new Camera(this, 45)
         this.orbit = new OrbitControl(this)
         this.cube = new Cube(this)
         this.plane = new Plane(this)
+        this.fullPlane = new fullPlane(this)
 
     }
 
@@ -37,13 +42,18 @@ class Scene {
 
         this.gl = this.canvas.getContext('webgl')
         if (this.gl == undefined) { return }
-        this.active = true
 
     }
 
     enableExtension(){
         this.gl.getExtension('OES_standard_derivatives');
         // this.gl.getExtension('EXT_shader_texture_lod');
+    }
+
+    loadTexture(){        
+        TextureLoader.load(Manifest.testTexture, 'testTexture').then(()=> {
+            this.active = true
+        })
     }
 
     render(){
@@ -61,8 +71,9 @@ class Scene {
         this.orbit.update()
         this.camera.update()
         this.camera.lookAt(vec3.fromValues(0, 0, 0))
-        this.cube.render()
-        this.plane.render()
+        // this.cube.render()
+        // this.plane.render()
+        this.fullPlane.render()
 
     }
 
