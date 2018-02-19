@@ -71,7 +71,6 @@ class Plane {
         shaderProgram.uHeightMapUniform = gl.getUniformLocation(shaderProgram, "uHeightMap")
         shaderProgram.uTimeUniform = gl.getUniformLocation(shaderProgram, "uTime")
 
-
         this.vertShader = vertSahder
         this.fragSahder = fragSahder
         this.program = shaderProgram

@@ -5,14 +5,14 @@ let mat4 = glmat.mat4
 let quat = glmat.quat
 
 class Camera {
-    constructor(scene, fov){
+    constructor(scene, fov) {
 
         this.scene = scene
         this.gl = scene.gl
-        this.fov = fov
-        
-        this.position   = vec3.fromValues(0, 10, -10)
-        this.rotation   = vec3.fromValues(0, 0, 0)
+        this.fov = fov        
+
+        this.position = vec3.fromValues(0, -2.8, 0)
+        this.rotation = vec3.fromValues(0, 0, 0)
         this.quaternion = quat.create()
 
         this.pMatrix = mat4.create()
@@ -30,26 +30,25 @@ class Camera {
         mat4.fromRotationTranslationScale(this.vMatrix, this.quaternion, this.position, [1, 1, 1])
     }
 
-    lookAt(tgt){
-        mat4.lookAt(this.vMatrix, this.position, tgt, [0,1,0])
+    lookAt(tgt) {
+        mat4.lookAt(this.vMatrix, this.position, tgt, [0, 1, 0])
     }
 
-    getProjectionMatrix(){
+    getProjectionMatrix() {
         return this.pMatrix
     }
 
-    getViewMatrix(){
+    getViewMatrix() {
         return this.vMatrix
     }
 
-    updateProjection(){
-        let gl = this.gl
-        mat4.perspective(this.pMatrix, this.fov * Math.PI / 180, gl.getParameter(gl.VIEWPORT)[2] / gl.getParameter(gl.VIEWPORT)[3], 0.1, 100.0)
+    updateProjection(ratio) {
+        mat4.perspective(this.pMatrix, this.fov * Math.PI / 180, ratio, 0.1, 100.0)
     }
 
-    update(){
+    update(ratio) {
         this.updatePositionMatrix()
-        this.updateProjection()
+        this.updateProjection(ratio)
     }
 }
 

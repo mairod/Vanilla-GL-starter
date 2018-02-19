@@ -1,11 +1,9 @@
-#version 300 es
-
 precision mediump float;
 
-in vec3 aPos;
-in vec2 aUvs;
+attribute vec3 aPos;
+attribute vec3 aUvs;
 
-out vec2 vUv;
+varying vec3 vUv;
 
 void main(void) {
 

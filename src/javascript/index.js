@@ -1,18 +1,13 @@
-import * as TOOLS from './components/tools.class.js'
-import Scene from './components/scene'
+import * as TOOLS from './glxp/tools.class.js'
+import RAF from './raf'
 
-var framecounter = new TOOLS.FrameRateUI()
+import MotionField from './motionfield/motionfield'
+import Scene from './glxp/scene'
 
-// start animating
-animate();
+const framecounter = new TOOLS.FrameRateUI()
 
-function animate() {
-    requestAnimationFrame(animate);
-
-    // Updating components
-    framecounter.update()
-    Scene.render()
-
-}
+RAF.suscribe('fps', framecounter.update.bind(framecounter))
+RAF.suscribe('motion field', MotionField.update.bind(MotionField))
+RAF.suscribe('scene', Scene.render.bind(Scene))
 
 // console.log("YO !");

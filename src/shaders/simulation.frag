@@ -7,12 +7,15 @@ in vec2 vUv;
 out vec4 FRAG_COLOR;
 
 uniform float uTime;
-uniform sampler2D uTexture;
+uniform float uVoxelDim;
+uniform vec2 uRez;
 
 void main() {
 
     vec2 uv = vUv;
-    vec3 color = texture(uTexture, uv).xyz;
-    FRAG_COLOR = vec4( color, 1.);
+
+    vec3 pos = vec3(uv.x, uv.y, 0.);
+
+    FRAG_COLOR = vec4( pos, 1.);
 
 }
